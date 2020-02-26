@@ -4,5 +4,5 @@ Name: pi_robot
 Description: Description of pi_robot
 Version: 0.0.0
 Cflags: 
-Libs: -L/home/yc_qian/catkin_ws/src/pi_robot/cmake-build-debug/devel/lib -lpi_robot
+Libs: -L${prefix}/lib -lpi_robot
 Requires: roscpp std_msgs message_runtime

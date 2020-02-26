@@ -38,6 +38,13 @@ Boost_SYSTEM_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/libboost_system.
 //Catkin enable testing
 CATKIN_ENABLE_TESTING:BOOL=ON
 
+//path to which gradle configuration and artifacts are deployed
+// in your workspace
+CATKIN_GLOBAL_GRADLE_DESTINATION:PATH=share/gradle
+
+//path to which maven artifacts are deployed in your workspace
+CATKIN_GLOBAL_MAVEN_DESTINATION:PATH=share/maven
+
 //Prefix to apply to package generated via gendebian
 CATKIN_PACKAGE_PREFIX:STRING=
 
@@ -338,6 +345,9 @@ gencpp_DIR:PATH=/opt/ros/kinetic/share/gencpp/cmake
 //The directory containing a CMake configuration file for geneus.
 geneus_DIR:PATH=/opt/ros/kinetic/share/geneus/cmake
 
+//The directory containing a CMake configuration file for genjava.
+genjava_DIR:PATH=/opt/ros/kinetic/share/genjava/cmake
+
 //The directory containing a CMake configuration file for genlisp.
 genlisp_DIR:PATH=/opt/ros/kinetic/share/genlisp/cmake
 
@@ -443,6 +453,9 @@ roscpp_traits_DIR:PATH=/opt/ros/kinetic/share/roscpp_traits/cmake
 
 //The directory containing a CMake configuration file for rosgraph_msgs.
 rosgraph_msgs_DIR:PATH=/opt/ros/kinetic/share/rosgraph_msgs/cmake
+
+//The directory containing a CMake configuration file for rosjava_build_tools.
+rosjava_build_tools_DIR:PATH=/opt/ros/kinetic/share/rosjava_build_tools/cmake
 
 //The directory containing a CMake configuration file for roslib.
 roslib_DIR:PATH=/opt/ros/kinetic/share/roslib/cmake

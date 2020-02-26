@@ -1,1 +1,1 @@
-/usr/bin/c++ -fPIC -g  -shared -Wl,-soname,libgtest.so -o libgtest.so CMakeFiles/gtest.dir/src/gtest-all.cc.o  -L/home/yc_qian/catkin_ws/src/pi_robot/cmake-build-debug/gtest/gtest/src -Wl,-rpath,/home/yc_qian/catkin_ws/src/pi_robot/cmake-build-debug/gtest/gtest/src -lpthread 
+/usr/bin/c++ -fPIC  -O3 -mavx2 -mfma -g  -shared -Wl,-soname,libgtest.so -o libgtest.so CMakeFiles/gtest.dir/src/gtest-all.cc.o  -L/home/yc_qian/catkin_ws/src/pi_robot/cmake-build-debug/gtest/gtest/src -Wl,-rpath,/home/yc_qian/catkin_ws/src/pi_robot/cmake-build-debug/gtest/gtest/src -lpthread 

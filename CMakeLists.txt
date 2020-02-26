@@ -3,8 +3,26 @@ project(pi_robot)
 
 ## Compile as C++14, supported in ROS Kinetic and newer
 add_compile_options(-std=c++14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(k4a_INCLUDE_DIRS /usr/local/include/k4a)
+set(CMAKE_CXX_FLAGS  "$ENV{CXXFLAGS} -O3")
+
+SET(fdt_base_dir   ${PROJECT_SOURCE_DIR})
+SET(fdt_src_dir    ${fdt_base_dir}/src/libfacedetection)
+SET(fdt_inc_dir    ${fdt_base_dir}/include/libfacedetection)
+
+SET(fdt_lib_name   facedetection)
+SET(fdt_lib_static ${fdt_lib_name})
+SET(fdt_lib_shared ${fdt_lib_name}_shared)
+
+FILE(GLOB_RECURSE fdt_source_files ${fdt_src_dir}/*.cpp)
+LIST(SORT         fdt_source_files)
+
+message("using avx2")
+add_definitions(-D_ENABLE_AVX2)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx2 -mfma")
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -18,7 +36,6 @@ find_package(catkin REQUIRED COMPONENTS
         )
 
 ## System dependencies are found with CMake's conventions
-find_package(k4a REQUIRED)
 
 find_package(OpenCV REQUIRED)
 
@@ -97,13 +114,16 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
   include
-  ${catkin_INCLUDE_DIRS} ${k4a_INCLUDE_RIDS} ${OpenCV_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} ${fdt_inc_dir}
 )
 
-## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/pi_robot.cpp
-# )
+# Create a static library (.a)
+ADD_LIBRARY(${fdt_lib_static} STATIC ${fdt_source_files})
+
+# Create a shared library (.so)
+ADD_LIBRARY(${fdt_lib_shared} SHARED ${fdt_source_files})
+SET_TARGET_PROPERTIES(${fdt_lib_shared} PROPERTIES OUTPUT_NAME "${fdt_lib_name}")
+SET_TARGET_PROPERTIES(${fdt_lib_shared} PROPERTIES PREFIX "lib")
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -130,6 +150,6 @@ include_directories(
 #   ${catkin_LIBRARIES}
 # )
 
-add_executable(test_k4a src/test_k4a.cpp)
-add_dependencies(test_k4a ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(test_k4a ${catkin_LIBRARIES} /usr/local/lib/libk4a.so.1.1 ${OpenCV_LIBS})
+add_executable(image_subscriber src/image_subscriber.cpp)
+add_dependencies(image_subscriber ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(image_subscriber ${catkin_LIBRARIES} ${OpenCV_LIBS} ${fdt_lib_static})

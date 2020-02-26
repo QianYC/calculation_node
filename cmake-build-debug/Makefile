@@ -80,6 +80,18 @@ install/local/fast: preinstall/fast
 	/home/yc_qian/clion-2018.2.4/bin/cmake/linux/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
 .PHONY : install/local/fast
 
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/home/yc_qian/clion-2018.2.4/bin/cmake/linux/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/home/yc_qian/clion-2018.2.4/bin/cmake/linux/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -112,18 +124,6 @@ test:
 test/fast: test
 
 .PHONY : test/fast
-
-# Special rule for the target install
-install: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/home/yc_qian/clion-2018.2.4/bin/cmake/linux/bin/cmake -P cmake_install.cmake
-.PHONY : install
-
-# Special rule for the target install
-install/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/home/yc_qian/clion-2018.2.4/bin/cmake/linux/bin/cmake -P cmake_install.cmake
-.PHONY : install/fast
 
 # Special rule for the target list_install_components
 list_install_components:
@@ -168,17 +168,30 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test_k4a
+# Target rules for targets named facedetection_shared
 
 # Build rule for target.
-test_k4a: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test_k4a
-.PHONY : test_k4a
+facedetection_shared: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 facedetection_shared
+.PHONY : facedetection_shared
 
 # fast build rule for target.
-test_k4a/fast:
-	$(MAKE) -f CMakeFiles/test_k4a.dir/build.make CMakeFiles/test_k4a.dir/build
-.PHONY : test_k4a/fast
+facedetection_shared/fast:
+	$(MAKE) -f CMakeFiles/facedetection_shared.dir/build.make CMakeFiles/facedetection_shared.dir/build
+.PHONY : facedetection_shared/fast
+
+#=============================================================================
+# Target rules for targets named facedetection
+
+# Build rule for target.
+facedetection: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 facedetection
+.PHONY : facedetection
+
+# fast build rule for target.
+facedetection/fast:
+	$(MAKE) -f CMakeFiles/facedetection.dir/build.make CMakeFiles/facedetection.dir/build
+.PHONY : facedetection/fast
 
 #=============================================================================
 # Target rules for targets named geometry_msgs_generate_messages_py
@@ -506,6 +519,19 @@ rosgraph_msgs_generate_messages_py/fast:
 .PHONY : rosgraph_msgs_generate_messages_py/fast
 
 #=============================================================================
+# Target rules for targets named image_subscriber
+
+# Build rule for target.
+image_subscriber: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 image_subscriber
+.PHONY : image_subscriber
+
+# fast build rule for target.
+image_subscriber/fast:
+	$(MAKE) -f CMakeFiles/image_subscriber.dir/build.make CMakeFiles/image_subscriber.dir/build
+.PHONY : image_subscriber/fast
+
+#=============================================================================
 # Target rules for targets named std_msgs_generate_messages_py
 
 # Build rule for target.
@@ -622,32 +648,122 @@ gtest_main/fast:
 	$(MAKE) -f gtest/gtest/CMakeFiles/gtest_main.dir/build.make gtest/gtest/CMakeFiles/gtest_main.dir/build
 .PHONY : gtest_main/fast
 
-src/test_k4a.o: src/test_k4a.cpp.o
+src/image_subscriber.o: src/image_subscriber.cpp.o
 
-.PHONY : src/test_k4a.o
+.PHONY : src/image_subscriber.o
 
 # target to build an object file
-src/test_k4a.cpp.o:
-	$(MAKE) -f CMakeFiles/test_k4a.dir/build.make CMakeFiles/test_k4a.dir/src/test_k4a.cpp.o
-.PHONY : src/test_k4a.cpp.o
+src/image_subscriber.cpp.o:
+	$(MAKE) -f CMakeFiles/image_subscriber.dir/build.make CMakeFiles/image_subscriber.dir/src/image_subscriber.cpp.o
+.PHONY : src/image_subscriber.cpp.o
 
-src/test_k4a.i: src/test_k4a.cpp.i
+src/image_subscriber.i: src/image_subscriber.cpp.i
 
-.PHONY : src/test_k4a.i
+.PHONY : src/image_subscriber.i
 
 # target to preprocess a source file
-src/test_k4a.cpp.i:
-	$(MAKE) -f CMakeFiles/test_k4a.dir/build.make CMakeFiles/test_k4a.dir/src/test_k4a.cpp.i
-.PHONY : src/test_k4a.cpp.i
+src/image_subscriber.cpp.i:
+	$(MAKE) -f CMakeFiles/image_subscriber.dir/build.make CMakeFiles/image_subscriber.dir/src/image_subscriber.cpp.i
+.PHONY : src/image_subscriber.cpp.i
 
-src/test_k4a.s: src/test_k4a.cpp.s
+src/image_subscriber.s: src/image_subscriber.cpp.s
 
-.PHONY : src/test_k4a.s
+.PHONY : src/image_subscriber.s
 
 # target to generate assembly for a file
-src/test_k4a.cpp.s:
-	$(MAKE) -f CMakeFiles/test_k4a.dir/build.make CMakeFiles/test_k4a.dir/src/test_k4a.cpp.s
-.PHONY : src/test_k4a.cpp.s
+src/image_subscriber.cpp.s:
+	$(MAKE) -f CMakeFiles/image_subscriber.dir/build.make CMakeFiles/image_subscriber.dir/src/image_subscriber.cpp.s
+.PHONY : src/image_subscriber.cpp.s
+
+src/libfacedetection/facedetectcnn-int8data.o: src/libfacedetection/facedetectcnn-int8data.cpp.o
+
+.PHONY : src/libfacedetection/facedetectcnn-int8data.o
+
+# target to build an object file
+src/libfacedetection/facedetectcnn-int8data.cpp.o:
+	$(MAKE) -f CMakeFiles/facedetection_shared.dir/build.make CMakeFiles/facedetection_shared.dir/src/libfacedetection/facedetectcnn-int8data.cpp.o
+	$(MAKE) -f CMakeFiles/facedetection.dir/build.make CMakeFiles/facedetection.dir/src/libfacedetection/facedetectcnn-int8data.cpp.o
+.PHONY : src/libfacedetection/facedetectcnn-int8data.cpp.o
+
+src/libfacedetection/facedetectcnn-int8data.i: src/libfacedetection/facedetectcnn-int8data.cpp.i
+
+.PHONY : src/libfacedetection/facedetectcnn-int8data.i
+
+# target to preprocess a source file
+src/libfacedetection/facedetectcnn-int8data.cpp.i:
+	$(MAKE) -f CMakeFiles/facedetection_shared.dir/build.make CMakeFiles/facedetection_shared.dir/src/libfacedetection/facedetectcnn-int8data.cpp.i
+	$(MAKE) -f CMakeFiles/facedetection.dir/build.make CMakeFiles/facedetection.dir/src/libfacedetection/facedetectcnn-int8data.cpp.i
+.PHONY : src/libfacedetection/facedetectcnn-int8data.cpp.i
+
+src/libfacedetection/facedetectcnn-int8data.s: src/libfacedetection/facedetectcnn-int8data.cpp.s
+
+.PHONY : src/libfacedetection/facedetectcnn-int8data.s
+
+# target to generate assembly for a file
+src/libfacedetection/facedetectcnn-int8data.cpp.s:
+	$(MAKE) -f CMakeFiles/facedetection_shared.dir/build.make CMakeFiles/facedetection_shared.dir/src/libfacedetection/facedetectcnn-int8data.cpp.s
+	$(MAKE) -f CMakeFiles/facedetection.dir/build.make CMakeFiles/facedetection.dir/src/libfacedetection/facedetectcnn-int8data.cpp.s
+.PHONY : src/libfacedetection/facedetectcnn-int8data.cpp.s
+
+src/libfacedetection/facedetectcnn-model.o: src/libfacedetection/facedetectcnn-model.cpp.o
+
+.PHONY : src/libfacedetection/facedetectcnn-model.o
+
+# target to build an object file
+src/libfacedetection/facedetectcnn-model.cpp.o:
+	$(MAKE) -f CMakeFiles/facedetection_shared.dir/build.make CMakeFiles/facedetection_shared.dir/src/libfacedetection/facedetectcnn-model.cpp.o
+	$(MAKE) -f CMakeFiles/facedetection.dir/build.make CMakeFiles/facedetection.dir/src/libfacedetection/facedetectcnn-model.cpp.o
+.PHONY : src/libfacedetection/facedetectcnn-model.cpp.o
+
+src/libfacedetection/facedetectcnn-model.i: src/libfacedetection/facedetectcnn-model.cpp.i
+
+.PHONY : src/libfacedetection/facedetectcnn-model.i
+
+# target to preprocess a source file
+src/libfacedetection/facedetectcnn-model.cpp.i:
+	$(MAKE) -f CMakeFiles/facedetection_shared.dir/build.make CMakeFiles/facedetection_shared.dir/src/libfacedetection/facedetectcnn-model.cpp.i
+	$(MAKE) -f CMakeFiles/facedetection.dir/build.make CMakeFiles/facedetection.dir/src/libfacedetection/facedetectcnn-model.cpp.i
+.PHONY : src/libfacedetection/facedetectcnn-model.cpp.i
+
+src/libfacedetection/facedetectcnn-model.s: src/libfacedetection/facedetectcnn-model.cpp.s
+
+.PHONY : src/libfacedetection/facedetectcnn-model.s
+
+# target to generate assembly for a file
+src/libfacedetection/facedetectcnn-model.cpp.s:
+	$(MAKE) -f CMakeFiles/facedetection_shared.dir/build.make CMakeFiles/facedetection_shared.dir/src/libfacedetection/facedetectcnn-model.cpp.s
+	$(MAKE) -f CMakeFiles/facedetection.dir/build.make CMakeFiles/facedetection.dir/src/libfacedetection/facedetectcnn-model.cpp.s
+.PHONY : src/libfacedetection/facedetectcnn-model.cpp.s
+
+src/libfacedetection/facedetectcnn.o: src/libfacedetection/facedetectcnn.cpp.o
+
+.PHONY : src/libfacedetection/facedetectcnn.o
+
+# target to build an object file
+src/libfacedetection/facedetectcnn.cpp.o:
+	$(MAKE) -f CMakeFiles/facedetection_shared.dir/build.make CMakeFiles/facedetection_shared.dir/src/libfacedetection/facedetectcnn.cpp.o
+	$(MAKE) -f CMakeFiles/facedetection.dir/build.make CMakeFiles/facedetection.dir/src/libfacedetection/facedetectcnn.cpp.o
+.PHONY : src/libfacedetection/facedetectcnn.cpp.o
+
+src/libfacedetection/facedetectcnn.i: src/libfacedetection/facedetectcnn.cpp.i
+
+.PHONY : src/libfacedetection/facedetectcnn.i
+
+# target to preprocess a source file
+src/libfacedetection/facedetectcnn.cpp.i:
+	$(MAKE) -f CMakeFiles/facedetection_shared.dir/build.make CMakeFiles/facedetection_shared.dir/src/libfacedetection/facedetectcnn.cpp.i
+	$(MAKE) -f CMakeFiles/facedetection.dir/build.make CMakeFiles/facedetection.dir/src/libfacedetection/facedetectcnn.cpp.i
+.PHONY : src/libfacedetection/facedetectcnn.cpp.i
+
+src/libfacedetection/facedetectcnn.s: src/libfacedetection/facedetectcnn.cpp.s
+
+.PHONY : src/libfacedetection/facedetectcnn.s
+
+# target to generate assembly for a file
+src/libfacedetection/facedetectcnn.cpp.s:
+	$(MAKE) -f CMakeFiles/facedetection_shared.dir/build.make CMakeFiles/facedetection_shared.dir/src/libfacedetection/facedetectcnn.cpp.s
+	$(MAKE) -f CMakeFiles/facedetection.dir/build.make CMakeFiles/facedetection.dir/src/libfacedetection/facedetectcnn.cpp.s
+.PHONY : src/libfacedetection/facedetectcnn.cpp.s
 
 # Help Target
 help:
@@ -657,11 +773,12 @@ help:
 	@echo "... depend"
 	@echo "... install/strip"
 	@echo "... install/local"
+	@echo "... install"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... test"
-	@echo "... install"
-	@echo "... test_k4a"
+	@echo "... facedetection_shared"
+	@echo "... facedetection"
 	@echo "... geometry_msgs_generate_messages_py"
 	@echo "... sensor_msgs_generate_messages_py"
 	@echo "... geometry_msgs_generate_messages_cpp"
@@ -687,6 +804,7 @@ help:
 	@echo "... tests"
 	@echo "... rosgraph_msgs_generate_messages_lisp"
 	@echo "... rosgraph_msgs_generate_messages_py"
+	@echo "... image_subscriber"
 	@echo "... std_msgs_generate_messages_py"
 	@echo "... roscpp_generate_messages_lisp"
 	@echo "... std_msgs_generate_messages_eus"
@@ -697,9 +815,18 @@ help:
 	@echo "... gmock"
 	@echo "... gtest"
 	@echo "... gtest_main"
-	@echo "... src/test_k4a.o"
-	@echo "... src/test_k4a.i"
-	@echo "... src/test_k4a.s"
+	@echo "... src/image_subscriber.o"
+	@echo "... src/image_subscriber.i"
+	@echo "... src/image_subscriber.s"
+	@echo "... src/libfacedetection/facedetectcnn-int8data.o"
+	@echo "... src/libfacedetection/facedetectcnn-int8data.i"
+	@echo "... src/libfacedetection/facedetectcnn-int8data.s"
+	@echo "... src/libfacedetection/facedetectcnn-model.o"
+	@echo "... src/libfacedetection/facedetectcnn-model.i"
+	@echo "... src/libfacedetection/facedetectcnn-model.s"
+	@echo "... src/libfacedetection/facedetectcnn.o"
+	@echo "... src/libfacedetection/facedetectcnn.i"
+	@echo "... src/libfacedetection/facedetectcnn.s"
 .PHONY : help
 
 
