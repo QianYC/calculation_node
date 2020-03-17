@@ -1,0 +1,20 @@
+# face width and height should >= 1/n of image cols or rows
+min_face_limit=15
+
+# loop times for mask operation
+mask_loop=100
+
+blur_loop=3
+gauss_loop=3
+
+input_file=../../../../img2.jpg
+
+# canny configuration
+ratio=3
+threshold=100
+kernel_size=5
+
+# HoughLines configuration
+line_threshold=50
+min_length=50
+max_gap=10

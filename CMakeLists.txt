@@ -5,6 +5,7 @@ project(pi_robot)
 add_compile_options(-std=c++14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 set(CMAKE_CXX_FLAGS  "$ENV{CXXFLAGS} -O3")
 
@@ -71,11 +72,10 @@ find_package(OpenCV REQUIRED)
 # )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+ add_service_files(
+   FILES
+   SrvState.srv
+ )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -85,10 +85,10 @@ find_package(OpenCV REQUIRED)
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+ )
 
 ###################################
 ## catkin specific configuration ##
@@ -113,12 +113,14 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-  include
+  include/pi_robot
   ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} ${fdt_inc_dir}
 )
 
 # Create a static library (.a)
 ADD_LIBRARY(${fdt_lib_static} STATIC ${fdt_source_files})
+add_library(photoComposer STATIC src/photoComposer.cpp)
+target_link_libraries(photoComposer ${OpenCV_LIBS} ${fdt_lib_static})
 
 # Create a shared library (.so)
 ADD_LIBRARY(${fdt_lib_shared} SHARED ${fdt_source_files})
@@ -152,4 +154,7 @@ SET_TARGET_PROPERTIES(${fdt_lib_shared} PROPERTIES PREFIX "lib")
 
 add_executable(image_subscriber src/image_subscriber.cpp)
 add_dependencies(image_subscriber ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(image_subscriber ${catkin_LIBRARIES} ${OpenCV_LIBS} ${fdt_lib_static})
+target_link_libraries(image_subscriber ${catkin_LIBRARIES} photoComposer)
+
+add_executable(myTest src/test.cpp)
+target_link_libraries(myTest photoComposer)
