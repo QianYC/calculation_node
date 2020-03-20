@@ -8,6 +8,52 @@
 #include <iostream>
 #include <map>
 
+/**
+ * robot state
+ */
+enum STATE {
+    /**
+     * 摆拍模式
+     */
+            STATIC = 0X0,
+    /**
+     * 摆拍，目标已确定
+     */
+            S_OBJECT_SELECTED = 0X1,
+    /**
+     * 摆拍，构图已确定
+     */
+            S_COMPOSITION_SELECTED = 0X2,
+    /**
+     * 摆拍，位置已调整
+     */
+            S_POSITION_ADJUSTED = 0X4,
+    /**
+     * 抓拍模式
+     */
+            DYNAMIC = 0X8,
+    /**
+     * 抓拍，目标已确定
+     */
+            D_OBJECT_SELECTED = 0X10,
+
+    /**
+     * 没有找到目标，随机移动
+     */
+            ROAMING = 0X20
+};
+
+/**
+ * robot motion
+ */
+enum MOTION {
+    STOP = 0X0,
+    FORWARD = 0X1,
+    BACKWARD = 0X2,
+    LEFT = 0X3,
+    RIGHT = 0X4
+};
+
 class ParameterReader {
 public:
     ParameterReader(std::string file = "../../../../params.txt"){

@@ -74,7 +74,7 @@ find_package(OpenCV REQUIRED)
 ## Generate services in the 'srv' folder
  add_service_files(
    FILES
-   SrvState.srv
+   SrvTrigger.srv
  )
 
 ## Generate actions in the 'action' folder
