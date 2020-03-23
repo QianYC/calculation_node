@@ -1,5 +1,5 @@
 # face width and height should >= 1/n of image cols or rows
-min_face_limit=15
+min_face_limit=20
 
 # loop times for mask operation
 mask_loop=100

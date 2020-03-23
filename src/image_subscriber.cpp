@@ -3,12 +3,13 @@
 //
 #include "photoComposer.hpp"
 
-STATE state = DYNAMIC, last_state;
+STATE state = STATIC, last_state;
 MOTION motion = STOP;
 bool change_state = false;
 cv::Mat image;
 vector<FaceRect> faces;
 DETECT_RESULT detect_result = NO_FACE;
+COMPOSE_RESULT compose_result;
 
 ros::Subscriber image_subscriber;
 ros::ServiceServer state_server;
@@ -34,7 +35,7 @@ void img_loop(const sensor_msgs::CompressedImage::ConstPtr &msg) {
             break;
         case S_OBJECT_SELECTED:
             ROS_INFO("S_OBJECT_SELECTED");
-            calculate_position(image);
+            compose_result = compose(image, faces);
             state = S_COMPOSITION_SELECTED;
             break;
         case S_COMPOSITION_SELECTED:
@@ -67,7 +68,8 @@ void img_loop(const sensor_msgs::CompressedImage::ConstPtr &msg) {
         case D_OBJECT_SELECTED:
             ROS_INFO("D_OBJECT_SELECTED");
             take_photo(camera_client);
-            state = DYNAMIC;
+            last_state = DYNAMIC;
+            state = ROAMING;
             break;
         case ROAMING:
             ROS_INFO("ROAMING");
@@ -91,8 +93,12 @@ void img_loop(const sensor_msgs::CompressedImage::ConstPtr &msg) {
 
 bool service_change_state(pi_robot::SrvTriggerRequest &request, pi_robot::SrvTriggerResponse &response) {
 //    ROS_INFO("change state server thread id : %d", this_thread::get_id());
+    if ((request.state &&
+         (state == DYNAMIC || state == D_OBJECT_SELECTED || (state == ROAMING && last_state == DYNAMIC)))
+        || (!request.state && (state < DYNAMIC || (state == ROAMING && last_state == STATIC)))) {
+        change_state = true;
+    }
     response.success = true;
-    change_state = true;
     return true;
 }
 

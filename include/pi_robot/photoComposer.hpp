@@ -21,12 +21,28 @@ enum DETECT_RESULT {
     HAVE_FACE = 0X2
 };
 
+enum COMPOSITION_RULE {
+    NONE = 0X0,
+    RULE_OF_THREE = 0X1,
+    CENTER = 0X2
+};
+
+struct COMPOSE_RESULT {
+    int x;
+    int y;
+    int w;
+    int h;
+    COMPOSITION_RULE rule;
+};
+
 /**
  * FR1.2, FR1.3
  * @param img
  * @return
  */
 vector<FaceRect> object_detect(cv::Mat &img, DETECT_RESULT &result);
+
+COMPOSE_RESULT compose(cv::Mat &img, vector<FaceRect> faces);
 
 /**
  * FR2

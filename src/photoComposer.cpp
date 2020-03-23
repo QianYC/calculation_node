@@ -61,6 +61,31 @@ map<float, float> detect_lines(cv::Mat &src) {
     return theta_rho_map;
 }
 
+COMPOSE_RESULT compose(cv::Mat &img, vector<FaceRect> faces) {
+    COMPOSE_RESULT result{.x=faces[0].x, .y=faces[0].y, .w=faces[0].w, .h=faces[0].h, .rule=NONE};
+
+    /**
+     * merge faces
+     */
+    int x1 = result.x, y1 = result.y, x2 = result.x + result.w, y2 = result.y + result.h;
+    for (int i = 1; i < faces.size(); ++i) {
+        FaceRect rect = faces[i];
+        x1 = rect.x < x1 ? rect.x : x1;
+        y1 = rect.y < y1 ? rect.y : y1;
+        x2 = rect.x + rect.w > x2 ? rect.x + rect.w : x2;
+        y2 = rect.y + rect.h > y2 ? rect.y + rect.h : y2;
+
+        cv::rectangle(img, cv::Rect(rect.x, rect.y, rect.w, rect.h), cv::Scalar(0, 255, 0), 2);
+    }
+    result.x = x1;
+    result.y = y1;
+    result.w = x2 - x1;
+    result.h = y2 - y1;
+    cv::rectangle(img, cv::Rect(result.x, result.y, result.w, result.h), cv::Scalar(0, 0, 255), 2);
+
+    return result;
+}
+
 void calculate_position(cv::Mat& img) {
     cv::Mat src = img.clone();
     map<float, float> lines = detect_lines(src);
