@@ -25,6 +25,10 @@ enum STATE {
      */
             S_COMPOSITION_SELECTED = 0X2,
     /**
+     * 摆拍，正在调整位置
+     */
+            S_ADJUSTING = 0X3,
+    /**
      * 摆拍，位置已调整
      */
             S_POSITION_ADJUSTED = 0X4,

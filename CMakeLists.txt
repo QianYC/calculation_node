@@ -9,6 +9,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 set(CMAKE_CXX_FLAGS  "$ENV{CXXFLAGS} -O3")
 
+# libfacedetection config
 SET(fdt_base_dir   ${PROJECT_SOURCE_DIR})
 SET(fdt_src_dir    ${fdt_base_dir}/src/libfacedetection)
 SET(fdt_inc_dir    ${fdt_base_dir}/include/libfacedetection)
@@ -19,6 +20,17 @@ SET(fdt_lib_shared ${fdt_lib_name}_shared)
 
 FILE(GLOB_RECURSE fdt_source_files ${fdt_src_dir}/*.cpp)
 LIST(SORT         fdt_source_files)
+
+# ultraface config
+SET(uf_src_dir ${PROJECT_SOURCE_DIR}/src/ultraface)
+SET(uf_inc_dir ${PROJECT_SOURCE_DIR}/include/ultraface)
+
+SET(uf_lib_name   ultraface)
+SET(uf_lib_static ${uf_lib_name})
+SET(uf_depend_lib ${PROJECT_SOURCE_DIR}/lib/ultraface/libMNN.so)
+
+FILE(GLOB_RECURSE uf_source_files ${uf_src_dir}/*.cpp)
+LIST(SORT         uf_source_files)
 
 message("using avx2")
 add_definitions(-D_ENABLE_AVX2)
@@ -114,13 +126,15 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
   include/pi_robot
-  ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} ${fdt_inc_dir}
+  ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} ${fdt_inc_dir} ${uf_inc_dir}
 )
 
 # Create a static library (.a)
 ADD_LIBRARY(${fdt_lib_static} STATIC ${fdt_source_files})
+ADD_LIBRARY(${uf_lib_static} STATIC ${uf_source_files})
+target_link_libraries(${uf_lib_static} ${uf_depend_lib})
 add_library(photoComposer STATIC src/photoComposer.cpp)
-target_link_libraries(photoComposer ${OpenCV_LIBS} ${fdt_lib_static})
+target_link_libraries(photoComposer ${OpenCV_LIBS} ${fdt_lib_static} ${uf_lib_static})
 
 # Create a shared library (.so)
 ADD_LIBRARY(${fdt_lib_shared} SHARED ${fdt_source_files})

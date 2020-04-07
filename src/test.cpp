@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <opencv2/imgproc.hpp>
+#include <chrono>
 #include "photoComposer.hpp"
 
 using namespace std;
@@ -222,13 +223,102 @@ void pyr(cv::Mat src) {
     }
 }
 
+void fdt() {
+    cv::VideoCapture capture;
+    capture.open(0);
+    cv::Mat image;
+    ofstream fs;
+    fs.open("fdt.txt", std::ios::app);
+    int count = 1000;
+    while (capture.isOpened() && count > 0) {
+        capture >> image;
+        cv::resize(image, image, cv::Size(320, 240));
+
+        auto start = chrono::steady_clock::now();
+        vector<FaceRect> faces = objectdetect_cnn(image.ptr(0), image.cols, image.rows, image.step);
+        for (auto f:faces) {
+            cv::rectangle(image, cv::Rect(f.x, f.y, f.w, f.h), cv::Scalar(0, 0, 255), 2);
+        }
+        auto end = chrono::steady_clock::now();
+        chrono::duration<double> elapsed = end - start;
+        cout << "all time: " << elapsed.count() << " s" << endl;
+        fs << elapsed.count() << endl;
+        count--;
+        cv::imshow("fdt", image);
+        cv::waitKey(1);
+    }
+}
+
+void uf() {
+    UltraFace ultraface("../../../../model/slim-320.mnn", 320, 240, 4, 0.65);
+
+    cv::VideoCapture capture;
+    capture.open(0);
+    cv::Mat image;
+    ofstream fs;
+    fs.open("uf.txt", std::ios::app);
+    int count = 1000;
+    while (capture.isOpened() && count > 0) {
+        capture >> image;
+        cv::resize(image, image, cv::Size(320, 240));
+
+        auto start = chrono::steady_clock::now();
+        vector<FaceInfo> face_info;
+        ultraface.detect(image, face_info);
+
+        for (auto face : face_info) {
+            cv::Point pt1(face.x1, face.y1);
+            cv::Point pt2(face.x2, face.y2);
+            cv::rectangle(image, pt1, pt2, cv::Scalar(0, 255, 0), 2);
+        }
+
+        auto end = chrono::steady_clock::now();
+        chrono::duration<double> elapsed = end - start;
+        cout << "all time: " << elapsed.count() << " s" << endl;
+        fs << elapsed.count() << endl;
+        count--;
+        cv::imshow("UltraFace", image);
+        cv::waitKey(1);
+    }
+}
+
+void cascade() {
+
+    cv::CascadeClassifier classifier("../../../../cascadefiles/haarcascade_frontalface_alt.xml");
+    cv::VideoCapture capture;
+    capture.open(0);
+    cv::Mat image;
+    ofstream fs;
+    fs.open("cascade.txt", std::ios::app);
+    int count = 1000;
+    while (capture.isOpened() && count > 0) {
+        capture >> image;
+        cv::resize(image, image, cv::Size(320, 240));
+        cv::cvtColor(image, image, cv::COLOR_BGR2GRAY);
+
+        auto start = chrono::steady_clock::now();
+        vector<cv::Rect> faces;
+        classifier.detectMultiScale(image, faces, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, cv::Size(30, 30));
+        for (auto f:faces) {
+            cv::rectangle(image, f, cv::Scalar(0, 0, 255), 2);
+        }
+        auto end = chrono::steady_clock::now();
+        chrono::duration<double> elapsed = end - start;
+        cout << "all time: " << elapsed.count() << " s" << endl;
+        fs << elapsed.count() << endl;
+        count--;
+        cv::imshow("cascade", image);
+        cv::waitKey(1);
+    }
+}
+
 int main(int argc, char **argv) {
 
 
-    string filename = params.getString("input_file");
-    cv::Mat src = cv::imread(filename);
-    cv::resize(src, src, cv::Size(320, 240));
-    cv::imshow("src", src);
+//    string filename = params.getString("input_file");
+//    cv::Mat src = cv::imread(filename);
+//    cv::resize(src, src, cv::Size(320, 240));
+//    cv::imshow("src", src);
 
 //    erode_dilate(src);
 //    laplace(src);
@@ -237,11 +327,15 @@ int main(int argc, char **argv) {
 //    lines(erode_dilate(src));
 //    segment(src);
 //    create_image();
-    pyr(src);
+//    pyr(src);
 
-    MOTION motion = (MOTION) 1;
-    int i = BACKWARD + 1;
-    printf("motion : %d, i : %d\n", motion, i);
-    
-    cv::waitKey(0);
+//    MOTION motion = (MOTION) 1;
+//    int i = BACKWARD + 1;
+//    printf("motion : %d, i : %d\n", motion, i);
+//
+//    cv::waitKey(0);
+
+//    fdt();
+//    uf();
+    cascade();
 }

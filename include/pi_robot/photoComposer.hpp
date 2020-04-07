@@ -10,10 +10,13 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgproc.hpp>
 #include <ros/ros.h>
+#include <ros/duration.h>
 #include <sensor_msgs/CompressedImage.h>
 #include <pi_robot/SrvTrigger.h>
 #include "facedetectcnn.h"
 #include "robotBase.hpp"
+#include "ultraface.hpp"
+#include <thread>
 
 enum DETECT_RESULT {
     NO_FACE = 0X0,
@@ -21,18 +24,26 @@ enum DETECT_RESULT {
     HAVE_FACE = 0X2
 };
 
-enum COMPOSITION_RULE {
-    NONE = 0X0,
-    RULE_OF_THREE = 0X1,
-    CENTER = 0X2
+enum COMPOSITION_MODE {
+    SINGLE = 0X1,
+    MULTIPLE = 0X2
 };
 
 struct COMPOSE_RESULT {
-    int x;
-    int y;
-    int w;
-    int h;
-    COMPOSITION_RULE rule;
+    float x1;
+    float y1;
+    float x2;
+    float y2;
+    COMPOSITION_MODE mode;
+};
+
+struct CHECK_ERROR_RESULT {
+    bool success;
+    MOTION direction;
+};
+
+struct RECT {
+    float x1, y1, x2, y2;
 };
 
 /**
@@ -40,14 +51,20 @@ struct COMPOSE_RESULT {
  * @param img
  * @return
  */
-vector<FaceRect> object_detect(cv::Mat &img, DETECT_RESULT &result);
-
-COMPOSE_RESULT compose(cv::Mat &img, vector<FaceRect> faces);
+vector<FaceInfo> object_detect(cv::Mat &img, DETECT_RESULT &result);
 
 /**
  * FR2
  * @param img
+ * @param faces
+ * @return
  */
+COMPOSE_RESULT compose(cv::Mat &img, vector<FaceInfo> faces);
+
+COMPOSE_RESULT calculate_expected_position(vector<FaceInfo> faces);
+
+CHECK_ERROR_RESULT calculate_error(COMPOSE_RESULT &result, cv::Mat &image);
+
 void calculate_position(cv::Mat& img);
 
 /**
