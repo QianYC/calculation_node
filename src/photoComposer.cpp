@@ -16,7 +16,7 @@ vector<FaceInfo> object_detect(cv::Mat &img, DETECT_RESULT &result) {
     vector<FaceInfo> filter;
     for (auto f :faces) {
         printf("face size : [%d,%d]\n", int(f.x2 - f.x1), int(f.y2 - f.y1));
-        if ((f.x2 - f.x1) * min_face_limit < img.cols || (f.y2 - f.y1) * min_face_limit < img.rows) {
+        if ((f.x2 - f.x1) * min_face_limit < img.cols && (f.y2 - f.y1) * min_face_limit < img.rows) {
             continue;
         }
         filter.push_back(f);

@@ -17,7 +17,7 @@ ros::ServiceServer state_server;
 ros::ServiceClient camera_client;
 
 void subscribe_callback(const sensor_msgs::CompressedImage::ConstPtr &msg) {
-    ROS_INFO("thread id %d", this_thread::get_id());
+//    ROS_INFO("thread id %d", this_thread::get_id());
     cv::Mat image = cv::imdecode(msg->data, CV_LOAD_IMAGE_COLOR);
     switch (state) {
         case STATIC:
@@ -63,6 +63,7 @@ void subscribe_callback(const sensor_msgs::CompressedImage::ConstPtr &msg) {
             /**
              * adjust position
              */
+            printf("moving %d\n", error_result.direction);
             state = S_COMPOSITION_SELECTED;
             break;
         case S_POSITION_ADJUSTED:

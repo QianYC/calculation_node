@@ -1,5 +1,5 @@
 # face width and height should >= 1/n of image cols or rows
-min_face_limit=30
+min_face_limit=60
 
 # face width and height should be not larger than 1/n
 max_face_limit=2
