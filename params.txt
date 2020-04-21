@@ -10,7 +10,7 @@ mask_loop=100
 blur_loop=3
 gauss_loop=3
 
-input_file=../../../../img1.jpg
+input_file=../../../../img2.jpg
 
 #erode configuration
 erode_size=5

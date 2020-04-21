@@ -312,6 +312,33 @@ void cascade() {
     }
 }
 
+void test_sort() {
+    vector<int> list = {1, 3, 5, 4, 2};
+    cout << "before sort" << endl;
+    for (int i = 0; i < list.size(); ++i) {
+        cout << list[i] << " ";
+    }
+    cout << endl;
+
+    sort(list.begin(),list.end(),[](int x,int y) {
+        return x > y;
+    });
+    cout << "after sort descending" << endl;
+    for (int i = 0; i < list.size(); ++i) {
+        cout << list[i] << " ";
+    }
+    cout << endl;
+
+    sort(list.begin(),list.end(),[](int x,int y) {
+        return x < y;
+    });
+    cout << "after sort ascending" << endl;
+    for (int i = 0; i < list.size(); ++i) {
+        cout << list[i] << " ";
+    }
+    cout << endl;
+}
+
 int main(int argc, char **argv) {
 
 
@@ -337,5 +364,7 @@ int main(int argc, char **argv) {
 
 //    fdt();
 //    uf();
-    cascade();
+//    cascade();
+
+    test_sort();
 }

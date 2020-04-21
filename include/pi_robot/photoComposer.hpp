@@ -13,10 +13,12 @@
 #include <ros/duration.h>
 #include <sensor_msgs/CompressedImage.h>
 #include <pi_robot/SrvTrigger.h>
+#include <pi_robot/SrvCapture.h>
 #include "facedetectcnn.h"
 #include "robotBase.hpp"
 #include "ultraface.hpp"
-#include <thread>
+#include "thread_pool.hpp"
+#include "motion_publisher.hpp"
 
 enum DETECT_RESULT {
     NO_FACE = 0X0,
@@ -53,14 +55,6 @@ struct RECT {
  */
 vector<FaceInfo> object_detect(cv::Mat &img, DETECT_RESULT &result);
 
-/**
- * FR2
- * @param img
- * @param faces
- * @return
- */
-COMPOSE_RESULT compose(cv::Mat &img, vector<FaceInfo> faces);
-
 COMPOSE_RESULT calculate_expected_position(vector<FaceInfo> faces);
 
 CHECK_ERROR_RESULT calculate_error(COMPOSE_RESULT &result, cv::Mat &image);
@@ -68,21 +62,10 @@ CHECK_ERROR_RESULT calculate_error(COMPOSE_RESULT &result, cv::Mat &image);
 void calculate_position(cv::Mat& img);
 
 /**
- * FR3
- */
-void adjust_position();
-
-/**
  * FR4
  */
-void take_photo(ros::ServiceClient &client);
+void take_photo(ros::ServiceClient &client, const COMPOSE_RESULT &result = {.x1=-1});
 
-/**
- * FR5
- * @param img
- */
-void process_photo(cv::Mat& img);
-
-
+COMPOSE_RESULT dynamic_get_target(vector<FaceInfo> faces);
 
 #endif //PI_ROBOT_PHOTOCOMPOSER_HPP

@@ -63,33 +63,6 @@ map<float, float> detect_lines(cv::Mat &src) {
     return theta_rho_map;
 }
 
-COMPOSE_RESULT compose(cv::Mat &img, vector<FaceInfo> faces) {
-    if (faces.size() == 1) {
-
-    } else {
-
-    }
-    COMPOSE_RESULT result{.x1=faces[0].x1, .y1=faces[0].y1, .x2=faces[0].x2, .y2=faces[0].y2, .mode=SINGLE};
-
-    /**
-     * merge faces
-     */
-    float x1 = result.x1, y1 = result.y1, x2 = result.x2, y2 = result.y2;
-    for (auto f:faces) {
-        x1 = f.x1 < x1 ? f.x1 : x1;
-        y1 = f.y1 < y1 ? f.y1 : y1;
-        x2 = f.x2 > x2 ? f.x2 : x2;
-        y2 = f.y2 > y2 ? f.y2 : y2;
-    }
-    result.x1 = x1;
-    result.y1 = y1;
-    result.x2 = x2;
-    result.y2 = y2;
-//    cv::rectangle(img, cv::Point(x1, y1), cv::Point(x2, y2), cv::Scalar(0, 0, 255), 2);
-
-    return result;
-}
-
 COMPOSE_RESULT calculate_expected_position(vector<FaceInfo> faces) {
     COMPOSE_RESULT result;
     if (faces.size() == 1) {
@@ -220,19 +193,33 @@ void calculate_position(cv::Mat& img) {
 
 }
 
-void adjust_position() {
 
-}
-
-void take_photo(ros::ServiceClient &client) {
-    pi_robot::SrvTrigger trigger;
-    if (client.call(trigger)) {
-        ROS_INFO("camera client calling service : %d", trigger.response.success);
+void take_photo(ros::ServiceClient &client, const COMPOSE_RESULT &result) {
+    pi_robot::SrvCapture capture;
+    if (result.mode == SINGLE) {
+        capture.request.x = result.x1;
+        capture.request.y = result.y1;
+    } else {
+        capture.request.x = (result.x1 + result.x2) / 2;
+        capture.request.y = (result.y1 + result.y2) / 2;
+    }
+    if (client.call(capture)) {
+        ROS_INFO("camera client calling service : %d", capture.response.success);
     } else {
         ROS_INFO("camera client failed to call service");
     }
 }
 
-void process_photo(cv::Mat& img) {
 
+COMPOSE_RESULT dynamic_get_target(vector<FaceInfo> faces) {
+    COMPOSE_RESULT result;
+    // sort faces descendingly according to face width
+    sort(faces.begin(), faces.end(), [](FaceInfo f1, FaceInfo f2) {
+        return (f1.x2 - f1.x1) > (f2.x2 - f2.x1);
+    });
+    FaceInfo maxFace = faces[0];
+    result.x1 = (maxFace.x1 + maxFace.x2) / 2;
+    result.y1 = (maxFace.y1 + maxFace.y2) / 2;
+    result.mode = SINGLE;
+    return result;
 }
