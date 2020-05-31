@@ -16,6 +16,7 @@ private:
     std::string topic_name;
     ThreadPool pool;
 
+    //把motion转换成ROS中控制机器人运动的消息类型
     geometry_msgs::Twist motion2twist(MOTION motion) {
         geometry_msgs::Twist msg;
         switch (motion) {
@@ -44,7 +45,8 @@ private:
 public:
     MotionPublisher() : pool(1) {}
 
-    MotionPublisher(std::string topic_name, ros::NodeHandle nodeHandle) : topic_name(topic_name), pool(1) {
+    MotionPublisher(std::string topic_name, ros::NodeHandle nodeHandle) 
+        : topic_name(topic_name), pool(1) {
         publisher = nodeHandle.advertise<geometry_msgs::Twist>(topic_name, 1);
     }
 
