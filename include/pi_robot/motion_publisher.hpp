@@ -55,6 +55,7 @@ public:
         topic_name = motionPublisher.topic_name;
     }
 
+    //控制机器人朝指定方向运动
     void move(MOTION motion) {
         geometry_msgs::Twist msg = motion2twist(motion);
         pool.submit([&] {
@@ -62,6 +63,7 @@ public:
         });
     }
 
+    //控制机器人朝指定方向运动一段时间
     void move_for(MOTION motion, int millisec) {
         geometry_msgs::Twist move = motion2twist(motion);
         geometry_msgs::Twist stop = motion2twist(STOP);
