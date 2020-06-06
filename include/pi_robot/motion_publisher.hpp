@@ -18,43 +18,10 @@ private:
 
     //把motion转换成ROS中控制机器人运动的消息类型
     geometry_msgs::Twist motion2twist(MOTION motion) {
-        geometry_msgs::Twist msg;
-        switch (motion) {
-            case FORWARD:
-                msg.linear.x = 0.1;
-                msg.angular.z = 0;
-                break;
-            case BACKWARD:
-                msg.linear.x = -0.1;
-                msg.angular.z = 0;
-                break;
-            case LEFT:
-                msg.linear.x = 0;
-                msg.angular.z = 0.1;
-                break;
-            case RIGHT:
-                msg.linear.x = 0;
-                msg.angular.z = -0.1;
-                break;
-            default:
-                msg.linear.x = 0;
-                msg.angular.z = 0;
-        }
-        return msg;
+        //已略去
     }
 public:
-    MotionPublisher() : pool(1) {}
-
-    MotionPublisher(std::string topic_name, ros::NodeHandle nodeHandle) 
-        : topic_name(topic_name), pool(1) {
-        publisher = nodeHandle.advertise<geometry_msgs::Twist>(topic_name, 1);
-    }
-
-    MotionPublisher &operator=(const MotionPublisher &motionPublisher) {
-        publisher = std::move(motionPublisher.publisher);
-        topic_name = motionPublisher.topic_name;
-    }
-
+    //构造函数已略去
     //控制机器人朝指定方向运动
     void move(MOTION motion) {
         geometry_msgs::Twist msg = motion2twist(motion);
